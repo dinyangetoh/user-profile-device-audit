@@ -28,3 +28,17 @@ export async function updateProfile(req: Request, res: Response): Promise<Respon
         return sendFailApiResponse(res, err.message || 'Profile update failed');
     }
 }
+
+export async function getProfile(req: Request, res: Response): Promise<Response> {
+    const userId = req['userId'];
+    if (!userId) {
+        return sendFailApiResponse(res, 'User not found');
+    }
+
+    try {
+        const userProfile = await profileService.getProfile(userId);
+        return sendSuccessApiResponse(res, userProfile, userProfile ? 200 : 404);
+    } catch (err) {
+        return sendFailApiResponse(res, err.message || 'Profile not found');
+    }
+}
