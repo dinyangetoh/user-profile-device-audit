@@ -11,8 +11,10 @@ model User {
   id           String       @id @default(uuid())
   email        String       @unique
   passwordHash String
+  verifyToken  String
+  isVerified   Boolean      @default(false)
   createdAt    DateTime     @default(now())
-  UserDevice   UserDevice?
+  UserDevice   UserDevice[]
   UserProfile  UserProfile?
 }
 
@@ -27,8 +29,9 @@ model UserProfile {
 }
 
 model UserDevice {
-  userId    String   @id
-  deviceId  String
+  deviceId  String   @id @unique
+  userId    String
+  details   String
   createdAt DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id])
 }

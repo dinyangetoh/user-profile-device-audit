@@ -1,18 +1,15 @@
 import { IsNotEmpty, Length } from 'class-validator';
 
-export class RegisterUserDto {
+export class UpdateUserProfileDto {
     @IsNotEmpty()
     userId: string;
 
-    @IsNotEmpty()
-    @Length(8, 32)
-    password: string;
+    @Length(3, 16)
+    username: string;
 
-    @IsNotEmpty()
     @Length(3, 16)
     firstName: string;
 
-    @IsNotEmpty()
     @Length(3, 16)
     lastName: string;
 }

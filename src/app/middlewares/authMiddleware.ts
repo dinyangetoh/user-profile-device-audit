@@ -1,21 +1,19 @@
-import jwt from 'jsonwebtoken';
-import { JWT_SECRET } from '../../constants';
 import { sendFailApiResponse } from '../helpers/apiResponse';
+import { verifyToken } from '../helpers/jwt.helper';
 
-export function verifyToken(req, res, next) {
-    const token = req.header('Authorization');
-    if (!token) {
-        sendFailApiResponse(res, 'User not authorized', [], 401);
+export async function authenticate(req, res, next) {
+    const bearerToken = req.header('Authorization');
+    if (!bearerToken) {
+        return sendFailApiResponse(res, 'User not authorized', [], 401);
     }
     try {
-        const decoded = jwt.verify(token, JWT_SECRET);
+        const [, token] = bearerToken.split(' ');
+        const decoded = await verifyToken(token);
         req.userId = decoded.userId;
         next();
     } catch (error) {
-        console.error(error);
-        res.status(401).json({ error: 'Unauthorized' });
-        sendFailApiResponse(res, 'Unauthorized', [], 401);
+        return sendFailApiResponse(res, `Unauthorized, reason ${error.message}`, [], 401);
     }
 }
 
-export default verifyToken;
+export default authenticate;

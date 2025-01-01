@@ -4,6 +4,8 @@ import dotenv from 'dotenv';
 import express, { Application, RequestHandler, Router } from 'express';
 import App from './app';
 import { APP_PORT } from './constants';
+import userAgent from 'express-useragent';
+import authMiddleware from './app/middlewares/authMiddleware';
 
 dotenv.config();
 
@@ -14,10 +16,10 @@ const expressApp: Application = express();
 const expressRouter: Router = express.Router();
 
 // Plugins
-const plugins: RequestHandler[] = [bodyParser.json()];
+const plugins: RequestHandler[] = [bodyParser.json(), userAgent.express()];
 
 // Configurable Request Middlewares
-const requestMiddlewares: RequestHandler[] = [];
+const requestMiddlewares: RequestHandler[] = [authMiddleware];
 
 const app = new App(expressApp, expressRouter, plugins, requestMiddlewares);
 
