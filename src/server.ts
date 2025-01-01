@@ -5,6 +5,7 @@ import express, { Application, RequestHandler, Router } from 'express';
 import App from './app';
 import { APP_PORT } from './constants';
 import userAgent from 'express-useragent';
+import fileUpload from 'express-fileupload';
 import authMiddleware from './app/middlewares/authMiddleware';
 
 dotenv.config();
@@ -16,7 +17,7 @@ const expressApp: Application = express();
 const expressRouter: Router = express.Router();
 
 // Plugins
-const plugins: RequestHandler[] = [bodyParser.json(), userAgent.express()];
+const plugins: RequestHandler[] = [bodyParser.json(), userAgent.express(), fileUpload()];
 
 // Configurable Request Middlewares
 const requestMiddlewares: RequestHandler[] = [authMiddleware];

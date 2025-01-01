@@ -4,11 +4,12 @@ export default class UserProfileRepository {
     constructor(private readonly prisma: PrismaClient) {}
 
     public async updateProfile(profile: Partial<UserProfile>): Promise<void> {
-        const { userId, username, firstName, lastName } = profile;
+        const { userId, username, ...otherDetails } = profile;
+
         try {
             await this.prisma.userProfile.upsert({
-                create: { userId, username, firstName, lastName },
-                update: { username, firstName, lastName },
+                create: { userId, username: username || userId, ...otherDetails },
+                update: otherDetails,
                 where: { userId },
             });
 

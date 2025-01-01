@@ -30,10 +30,6 @@ export default class UserService {
                 ...user,
                 passwordHash: undefined,
             });
-            this.eventEmitter.emit(EVENTS.SEND_EMAIL_VERIFICATION, {
-                email: user.email,
-                verifyToken: user.verifyToken,
-            });
         } catch (error) {
             throw error;
         }
